@@ -1,0 +1,20 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract AssetBridge {
+    address public locker; // 资产锁定合约地址
+    mapping(address, uint256) public mintedAssets;
+
+    constructor(address _locker) {
+        locker = _locker;
+    }
+
+    function mintAsset(address user, uint256 amount) public {
+        require(msg.sender == locker, "Only locker can mint");
+        mintedAssets[user] += amount;
+
+        emit AssetMinted(user, amount);
+    }
+
+    event AssetMinted(address indexed user, uint256 amount);
+}
